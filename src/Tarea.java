@@ -34,4 +34,19 @@ public class Tarea {
     public Integer getPrioridad() {
         return prioridad;
     }
+
+    public boolean estoyEnRango(int prioridadInferior, int prioridadSuperior){
+        return (this.getPrioridad() >= prioridadInferior && this.getPrioridad() <= prioridadSuperior);
+    }
+
+    @Override
+    public String toString() {
+        return "Tarea { " +
+                "id = '" + id + '\'' +
+                ", nombre = '" + nombre + '\'' +
+                ", tiempo = " + tiempo +
+                ", critica = " + critica +
+                ", prioridad = " + prioridad +
+                " }";
+    }
 }
