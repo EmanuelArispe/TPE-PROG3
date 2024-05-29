@@ -1,6 +1,8 @@
 package src;
 
+import org.jetbrains.annotations.NotNull;
 import src.Tarea;
+import src.backtraking.Estado;
 import src.utils.CSVReader;
 
 import java.util.*;
@@ -12,16 +14,22 @@ import java.util.*;
  */
 public class Servicios {
     private HashMap<String,Tarea> almacenTareas;
-    private HashMap<String, Procesador> almacenProc;
+    private HashMap<String,Procesador> almacenProcesadores;
+    private LinkedList<Tarea> tareasCriticas;
+    private LinkedList<Tarea> tareasNoCriticas;
+    private LinkedList<Tarea> listTareas;
     /*
      * Expresar la complejidad temporal del constructor.
      */
     public Servicios(String pathProcesadores, String pathTareas){
         almacenTareas = new HashMap<String, Tarea>();
-        almacenProc = new HashMap<String, Procesador>();
+        almacenProcesadores = new HashMap<String, Procesador>();
+        tareasCriticas = new LinkedList<>();
+        tareasNoCriticas = new LinkedList<>();
+        listTareas = new LinkedList<>();
         CSVReader reader = new CSVReader();
-        reader.readProcessors(pathProcesadores,almacenProc);
-        reader.readTasks(pathTareas,almacenTareas);
+        reader.readProcessors(pathProcesadores,almacenProcesadores);
+        reader.readTasks(pathTareas,almacenTareas,tareasCriticas,tareasNoCriticas, listTareas);
     }
 
     /*
@@ -33,37 +41,66 @@ public class Servicios {
                             almacenTareas.get(ID).getPrioridad());}
 
     /*
-     * Expresar la complejidad temporal del servicio 2.
+     * La complejidad computacional de la función servicio2 es O(1).
+     * Esto se debe a que la operación Collections.unmodifiableList simplemente crea una vista inmutable de la lista original
+     * sin copiar sus elementos, y esta operación es de tiempo constante.
      */
     public List<Tarea> servicio2(boolean esCritica) {
-        Iterator<Tarea> listaTareas = obtenerTareas();
-        List<Tarea> listCritica = new LinkedList<Tarea>();
-
-        listaTareas.forEachRemaining(newTarea -> {if(newTarea.getCritica().equals(esCritica))
-                                                    listCritica.add(new Tarea(  newTarea.getId(),
-                                                                                newTarea.getNombre(), newTarea.getTiempo(),
-                                                                                newTarea.getCritica(),newTarea.getPrioridad()));});
-        return listCritica;
+        return esCritica ? Collections.unmodifiableList(this.tareasCriticas) : Collections.unmodifiableList(this.tareasNoCriticas);
     }
 
     /*
-     * Expresar la complejidad temporal del servicio 3.
+     * La complejidad computacional de la función servicio3 es O(n).
+     * Esto se debe a que la función itera sobre todos los elementos del iterador una vez (O(n)) y para cada elemento que cumple la condición,
+     * realiza una operación de copia que tiene una complejidad constante (O(1)).
+     * Por lo tanto, la complejidad total de la función es lineal respecto al número de tareas en el iterador (O(n)).
+     * Cabe aclarar que se opto por esta implementancion porque siempre va a ser O(n) y la implementacion del codigo y la estructura no son complejas
+     * pero existen otras opticiones como crear un arbol binario donde se ordena por la prioridad aunque en el peor de los casos seria O(n) aunque
+     * tendria casos que se asemejarian a (Log2 n).
      */
     public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
         Iterator<Tarea> listaTareas = obtenerTareas();
         List<Tarea> listPrioridadTareas = new LinkedList<Tarea>();
 
-        listaTareas.forEachRemaining(tarea -> {if(tarea.estoyEnRango(prioridadInferior,prioridadSuperior)){
-                                                    listPrioridadTareas.add(  new Tarea(tarea.getId(),
-                                                                                        tarea.getNombre(), tarea.getTiempo(),
-                                                                                        tarea.getCritica(),tarea.getPrioridad()));}});
+        listaTareas.forEachRemaining(nextTarea -> {if(nextTarea.estoyEnRango(prioridadInferior,prioridadSuperior)){
+                                                    listPrioridadTareas.add(  new Tarea(nextTarea.getId(),
+                                                                                        nextTarea.getNombre(), nextTarea.getTiempo(),
+                                                                                        nextTarea.getCritica(),nextTarea.getPrioridad()));}});
         return listPrioridadTareas;
     }
 
 
 
-    private Iterator<Tarea> obtenerTareas(){
+    private @NotNull Iterator<Tarea> obtenerTareas(){
         return almacenTareas.values().iterator();
     }
 
+    private @NotNull Iterator<Procesador> obtenerProcesadores(){return almacenProcesadores.values().iterator();}
+
+    public void backtraking(int tiempo){
+        Estado estado = new Estado();
+        backtraking(tiempo,estado,listTareas);
+        System.out.println(estado.toString());
+    }
+
+    private void backtraking(int tiempo, Estado estado, LinkedList<Tarea> listTareas){
+        if(listTareas.isEmpty()){
+            estado.sumarEstado();
+            if(estado.esMejorSolucion()){
+                estado.setMejorSolucion();
+            }
+        }else {
+            Tarea newTarea = listTareas.removeFirst();
+            Iterator<Procesador> listProd = obtenerProcesadores();
+            while(listProd.hasNext()){
+                Procesador newProd = listProd.next();
+                if(newProd.cumpleCondicion(newTarea,tiempo)){
+                    estado.addTarea(newTarea,newProd);
+                    backtraking(tiempo,estado,listTareas);
+                    estado.removeTarea(newTarea,newProd);
+                }
+            }
+            listTareas.addFirst(newTarea);
+        }
+    }
 }
