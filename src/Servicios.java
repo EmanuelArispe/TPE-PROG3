@@ -2,7 +2,6 @@ package src;
 
 import org.jetbrains.annotations.NotNull;
 import src.Tarea;
-import src.backtraking.Estado;
 import src.utils.CSVReader;
 
 import java.util.*;
@@ -77,30 +76,5 @@ public class Servicios {
 
     private @NotNull Iterator<Procesador> obtenerProcesadores(){return almacenProcesadores.values().iterator();}
 
-    public void backtraking(int tiempo){
-        Estado estado = new Estado();
-        backtraking(tiempo,estado,listTareas);
-        System.out.println(estado.toString());
-    }
 
-    private void backtraking(int tiempo, Estado estado, LinkedList<Tarea> listTareas){
-        if(listTareas.isEmpty()){
-            estado.sumarEstado();
-            if(estado.esMejorSolucion()){
-                estado.setMejorSolucion();
-            }
-        }else {
-            Tarea newTarea = listTareas.removeFirst();
-            Iterator<Procesador> listProd = obtenerProcesadores();
-            while(listProd.hasNext()){
-                Procesador newProd = listProd.next();
-                if(newProd.cumpleCondicion(newTarea,tiempo)){
-                    estado.addTarea(newTarea,newProd);
-                    backtraking(tiempo,estado,listTareas);
-                    estado.removeTarea(newTarea,newProd);
-                }
-            }
-            listTareas.addFirst(newTarea);
-        }
-    }
 }

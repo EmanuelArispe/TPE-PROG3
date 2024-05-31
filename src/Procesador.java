@@ -2,7 +2,9 @@ package src;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Procesador {
 
@@ -11,6 +13,7 @@ public class Procesador {
     private Boolean refrigerado;
     private Integer anio;
     private LinkedList<Tarea> listTareas;
+    private Integer tiempoProcesamiento;
 
 
     public Procesador(String id, String codigo, Boolean refrigerado, Integer anio) {
@@ -18,7 +21,9 @@ public class Procesador {
         this.codigo = codigo;
         this.refrigerado = refrigerado;
         this.anio = anio;
+        this.tiempoProcesamiento = 0;
         listTareas = new LinkedList<>();
+
     }
 
     public String getId() {
@@ -37,25 +42,29 @@ public class Procesador {
         return anio;
     }
 
+    public Integer getTiempoProcesamiento() {
+        return tiempoProcesamiento;
+    }
+
+    public List<Tarea> getListTareas() {
+        return Collections.unmodifiableList(listTareas);
+    }
+
+    private void setTiempoProcesamiento(Integer tiempoProcesamiento) {
+        this.tiempoProcesamiento = tiempoProcesamiento;
+    }
+
     public void  addTarea(Tarea newTarea){
+        setTiempoProcesamiento(getTiempoProcesamiento() + newTarea.getTiempo());
         listTareas.addFirst(newTarea);
     }
 
     public void deleteTarea(Tarea oldTarea){
+        setTiempoProcesamiento(getTiempoProcesamiento() - oldTarea.getTiempo());
         listTareas.remove(oldTarea);
     }
 
-    public boolean cumpleCondicion(Tarea tarea, int tiempo) {
-        return !(sonTareasCriticas(tarea) || excedeTiempoSinRefrigeracion(tarea, tiempo));
-    }
 
-    private boolean sonTareasCriticas(Tarea tarea) {
-        return tarea.getCritica() && !listTareas.isEmpty() && listTareas.getFirst().getCritica();
-    }
-
-    private boolean excedeTiempoSinRefrigeracion(Tarea tarea, int tiempo) {
-        return !getRefrigerado() && tarea.getTiempo() < tiempo;
-    }
 
 
 
