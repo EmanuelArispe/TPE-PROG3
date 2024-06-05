@@ -2,11 +2,10 @@ package src;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Procesador {
+public class Procesador implements Comparable<Procesador>{
 
     private String id;
     private String codigo;
@@ -14,16 +13,29 @@ public class Procesador {
     private Integer anio;
     private LinkedList<Tarea> listTareas;
     private Integer tiempoProcesamiento;
+    private Integer cantCriticas;
+
+    private final Integer LIMITE = 2;
 
 
     public Procesador(String id, String codigo, Boolean refrigerado, Integer anio) {
-        this.id = id;
-        this.codigo = codigo;
-        this.refrigerado = refrigerado;
-        this.anio = anio;
-        this.tiempoProcesamiento = 0;
+        setId(id);
+        setCodigo(codigo);
+        setRefrigerado(refrigerado);
+        setAnio(anio);
+        setTiempoProcesamiento(0);
+        setCantCriticas(0);
         listTareas = new LinkedList<>();
+    }
 
+    public Procesador(String id, String codigo, Boolean refrigerado, Integer anio, LinkedList<Tarea> listTareas, Integer tiempoProcesamiento, Integer cantCriticas) {
+        setId(id);
+        setCodigo(codigo);
+        setRefrigerado(refrigerado);
+        setAnio(anio);
+        setTiempoProcesamiento(tiempoProcesamiento);
+        setCantCriticas(cantCriticas);
+        this.listTareas = listTareas;
     }
 
     public String getId() {
@@ -46,8 +58,32 @@ public class Procesador {
         return tiempoProcesamiento;
     }
 
-    public List<Tarea> getListTareas() {
-        return Collections.unmodifiableList(listTareas);
+    private List<Tarea> getListTareas() {
+        return this.listTareas;
+    }
+
+    public Integer getCantCriticas() {
+        return cantCriticas;
+    }
+
+    private void setId(String id) {
+        this.id = id;
+    }
+
+    private void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    private void setRefrigerado(Boolean refrigerado) {
+        this.refrigerado = refrigerado;
+    }
+
+    private void setAnio(Integer anio) {
+        this.anio = anio;
+    }
+
+    private void setCantCriticas(Integer cantCriticas) {
+        this.cantCriticas = cantCriticas;
     }
 
     private void setTiempoProcesamiento(Integer tiempoProcesamiento) {
@@ -56,24 +92,48 @@ public class Procesador {
 
     public void  addTarea(Tarea newTarea){
         setTiempoProcesamiento(getTiempoProcesamiento() + newTarea.getTiempo());
-        listTareas.addFirst(newTarea);
+        if(newTarea.getCritica()) setCantCriticas(getCantCriticas()+1);
+        getListTareas().addFirst(newTarea);
     }
 
     public void deleteTarea(Tarea oldTarea){
         setTiempoProcesamiento(getTiempoProcesamiento() - oldTarea.getTiempo());
-        listTareas.remove(oldTarea);
+        if(oldTarea.getCritica()) setCantCriticas(getCantCriticas()-1);
+        getListTareas().remove(oldTarea);
     }
 
+    public Procesador copy(){
+        LinkedList<Tarea> newList = new LinkedList<Tarea>();
+        newList.addAll(getListTareas());
+        return new Procesador(getId(),getCodigo(),getRefrigerado(),getAnio(),newList,getTiempoProcesamiento(),getCantCriticas());
+    }
 
+    public boolean limiteCriticas(){
+        return getCantCriticas()>=LIMITE;
+    }
 
-
+    private String listaToString(){
+        String cadena = "";
+        for (Tarea tarea: getListTareas()) {
+            cadena+= tarea.toString() + "\n";
+        }
+        return cadena;
+    }
 
     @Override
     public String toString() {
-        return "Procesador{" +
-                "id='" + id + '\'' +
-                ", refrigerado= " + refrigerado +
-                ", Lista de Tareas= " + listTareas.toString() +
-                '}';
+        String tareas = (!getListTareas().isEmpty()) ? listaToString() + "\n": " No hay tareas asignadas " + "\n";
+        return "Procesador { " +
+                "id='" + getId() + '\'' +
+                ", refrigerado = " + getRefrigerado() +
+                ", tiempo Procesamiento= " + getTiempoProcesamiento() + " }"+
+                "\n" +
+                "Lista de Tareas = " +  tareas
+                ;
+    }
+
+    @Override
+    public int compareTo(@NotNull Procesador o) {
+        return getTiempoProcesamiento().compareTo(o.getTiempoProcesamiento());
     }
 }

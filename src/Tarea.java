@@ -1,10 +1,12 @@
 package src;
 
-public class Tarea {
+import org.jetbrains.annotations.NotNull;
+
+public class Tarea implements Comparable<Tarea>{
     private String id;
     private String nombre;
     private Integer tiempo;
-    private Boolean critica ;
+    private Boolean critica;
     private Integer prioridad;
 
     public Tarea(String id, String nombre, Integer tiempo, Boolean critica, Integer prioridad) {
@@ -35,18 +37,21 @@ public class Tarea {
         return prioridad;
     }
 
-    public boolean estoyEnRango(int prioridadInferior, int prioridadSuperior){
+    public boolean estoyEnRango(int prioridadInferior, int prioridadSuperior) {
         return (this.getPrioridad() >= prioridadInferior && this.getPrioridad() <= prioridadSuperior);
     }
 
     @Override
     public String toString() {
-        return "Tarea { " +
-                "id = '" + id + '\'' +
-                ", nombre = '" + nombre + '\'' +
-                ", tiempo = " + tiempo +
-                ", critica = " + critica +
-                ", prioridad = " + prioridad +
-                " }";
+        return " Id = '" + getId() + '\'' +
+                // ", nombre = '" + getNombre() + '\'' +
+                ", tiempo = " + getTiempo() +
+                ", critica = " + getCritica() +
+                ", prioridad = " + getPrioridad();
+    }
+
+    @Override
+    public int compareTo(@NotNull Tarea o) {
+        return getTiempo().compareTo(o.getTiempo());
     }
 }

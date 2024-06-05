@@ -13,16 +13,12 @@ public class Main {
         servicios.servicio3(50,100).forEach(tarea -> System.out.println(tarea.toString()));
         System.out.println("Servicios No criticoos");
         servicios.servicio2(false).forEach(tarea -> System.out.println(tarea.toString()));
+        */
 
-         */
         System.out.println("Backtraking");
-        servicios.backtraking(20);
-        /*
-        for (int i = 5; i < 50; i++){
-            if(i%2 == 0){System.out.println("T"+i+";Tarea"+i+";"+((Integer)(i+i)/3+1) +";true" +";"+ (i*3)/2 );}
-            else{System.out.println("T"+i+";Tarea"+i+";"+((Integer)(i+i)/3+1) +";false" +";"+ (i*3)/2 );}
+        System.out.println(servicios.servicioBacktraking(5).toString());
 
-        }
-         */
     }
+
+
 }

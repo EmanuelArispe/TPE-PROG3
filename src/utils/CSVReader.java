@@ -1,6 +1,5 @@
 package src.utils;
 
-import org.jetbrains.annotations.NotNull;
 import src.Procesador;
 import src.Tarea;
 
@@ -18,7 +17,7 @@ public class CSVReader {
     public CSVReader() {
     }
 
-    public void readTasks(String taskPath, HashMap<String,Tarea>almacenTareas, LinkedList<Tarea> tareasCriticas,LinkedList<Tarea> tareasNoCriticas, LinkedList<Tarea> listTareas) {
+    public void readTasks(String taskPath, HashMap<String, Tarea> almacenTareas, LinkedList<Tarea> tareasCriticas, LinkedList<Tarea> tareasNoCriticas, LinkedList<Tarea> listTareas) {
 
         // Obtengo una lista con las lineas del archivo
         // lines.get(0) tiene la primer linea del archivo
@@ -42,30 +41,28 @@ public class CSVReader {
         }
     }
 
-    private Tarea createTarea(String[] line){
-        return new Tarea(line[0].trim(),line[1].trim(),Integer.parseInt(line[2].trim()),Boolean.parseBoolean(line[3].trim()),Integer.parseInt(line[4].trim()));
+    private Tarea createTarea(String[] line) {
+        return new Tarea(line[0].trim(), line[1].trim(), Integer.parseInt(line[2].trim()), Boolean.parseBoolean(line[3].trim()), Integer.parseInt(line[4].trim()));
     }
 
-    public void readProcessors(String processorPath, HashMap<String,Procesador> almacenProcesadores) {
+    public LinkedList<Procesador> readProcessors(String processorPath) {
 
         // Obtengo una lista con las lineas del archivo
         // lines.get(0) tiene la primer linea del archivo
         // lines.get(1) tiene la segunda linea del archivo... y así
         ArrayList<String[]> lines = this.readContent(processorPath);
-
-        for (String[] line: lines) {
+        LinkedList<Procesador> listProd = new LinkedList<Procesador>();
+        for (String[] line : lines) {
             // Cada linea es un arreglo de Strings, donde cada posicion guarda un elemento
             Procesador newProcesador = createProcesador(line);
-            if(!almacenProcesadores.containsKey(newProcesador)){
-                almacenProcesadores.put(newProcesador.getId(), newProcesador);
-            }
+            listProd.add(newProcesador);
             // Aca instanciar lo que necesiten en base a los datos leidos
         }
-
+        return listProd;
     }
 
-    private Procesador createProcesador(String[] line){
-        return new Procesador(line[0].trim(),line[1].trim(),Boolean.parseBoolean(line[2].trim()),Integer.parseInt(line[3].trim()));
+    private Procesador createProcesador(String[] line) {
+        return new Procesador(line[0].trim(), line[1].trim(), Boolean.parseBoolean(line[2].trim()), Integer.parseInt(line[3].trim()));
     }
 
     private ArrayList<String[]> readContent(String path) {
