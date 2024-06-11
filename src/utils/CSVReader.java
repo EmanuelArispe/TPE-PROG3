@@ -81,12 +81,11 @@ public class CSVReader {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            if (bufferedReader != null)
-                try {
-                    bufferedReader.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+            if (bufferedReader != null) try {
+                bufferedReader.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
 
         return lines;

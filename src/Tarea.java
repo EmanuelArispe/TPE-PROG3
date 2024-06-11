@@ -2,7 +2,7 @@ package src;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Tarea implements Comparable<Tarea>{
+public class Tarea implements Comparable<Tarea> {
     private String id;
     private String nombre;
     private Integer tiempo;
@@ -44,10 +44,10 @@ public class Tarea implements Comparable<Tarea>{
     @Override
     public String toString() {
         return " Id = '" + getId() + '\'' +
-                // ", nombre = '" + getNombre() + '\'' +
-                ", tiempo = " + getTiempo() +
-                ", critica = " + getCritica() +
-                ", prioridad = " + getPrioridad();
+                ", Nombre = '" + getNombre() + '\'' +
+                ", Tiempo = " + getTiempo() +
+                ", Critica = " + getCritica() +
+                ", Prioridad = " + getPrioridad();
     }
 
     @Override

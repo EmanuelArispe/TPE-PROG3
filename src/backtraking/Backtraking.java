@@ -3,8 +3,6 @@ package src.backtraking;
 import src.Procesador;
 import src.Tarea;
 
-import java.security.SignatureSpi;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 

@@ -19,7 +19,7 @@ public class Estado {
         setCantEstado(0);
     }
 
-    protected void setTiempoSolucion(int tiempoSolucioActual) {
+    public void setTiempoSolucion(int tiempoSolucioActual) {
         this.tiempoSolucion = tiempoSolucioActual;
     }
 
@@ -48,7 +48,7 @@ public class Estado {
         this.cantEstado = cantEstado;
     }
 
-    protected HashMap<String, Procesador> getSolucion() {
+    public HashMap<String, Procesador> getSolucion() {
         return solucion;
     }
 
@@ -84,10 +84,11 @@ public class Estado {
 
     @Override
     public String toString() {
-        return !solucion.isEmpty() ? " --- Mejor Estado Solucion ---" + "\n" + solucionToString() +
+        return !solucion.isEmpty() ? " --- Mejor Estado Solucion ---" + "\n" + "\n" + solucionToString() +
                 "Tiempo max Solucion = " + getTiempoSolucion() + "\n" +
                 "Cantidad de Estado Finales = " + getCantEstadoFinales() + "\n" +
-                "Cantidad de Estado Totales = " + getCantEstado()
-                : "--- No se encontro una solucion --- ";
+                "Cantidad de Estado Totales = " + getCantEstado() + "\n" + "\n" +
+                " ------------------------------------------------------------------------------------------ "
+                : "--- No se encontro una solucion --- " + "\n";
     }
 }

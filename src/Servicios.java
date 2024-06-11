@@ -22,7 +22,10 @@ public class Servicios {
     private LinkedList<Tarea> listTareas;
 
     /*
-     * Expresar la complejidad temporal del constructor.
+     * La complejidad temporal del constructor es O(n).
+     * La complejidad temporal de la función readTasks es O(t), donde t es el número de tareas, ya que cada línea del archivo se procesa una vez y las operaciones dentro del bucle tienen un costo constante.
+     * La complejidad temporal de la función readProcessors es O(p), donde p es el número de procesadores, debido a que también procesa cada línea del archivo una vez con operaciones de costo constante.
+     * Por lo tanto, el costo computacional del constructor Servicios es O(t + p), combinando las complejidades de ambas funciones O(n).
      */
     public Servicios(String pathProcesadores, String pathTareas) {
         almacenTareas = new HashMap<String, Tarea>();
@@ -54,8 +57,8 @@ public class Servicios {
         return listTareas;
     }
 
-    /*
-     * Expresar la complejidad temporal del servicio 1.
+    /* La complejidad computacional temporal de la función servicio1 es O(1), ya que todas las operaciones realizadas (acceso al mapa, acceso a los atributos y creación del objeto)
+     tienen una complejidad constante.
      */
     public Tarea servicio1(String ID) {
         return new Tarea(getAlmacenTareas().get(ID).getId(), getAlmacenTareas().get(ID).getNombre(),
@@ -65,8 +68,8 @@ public class Servicios {
 
     /*
      * La complejidad computacional de la función servicio2 es O(1).
-     * Esto se debe a que la operación Collections.unmodifiableList simplemente crea una vista inmutable de la lista original
-     * sin copiar sus elementos, y esta operación es de tiempo constante.
+     * Simplemente devuelven referencias a listas ya existentes (tareasCriticas y tareasNoCriticas),
+     * sin realizar operaciones adicionales que dependan del tamaño de las listas.
      */
     public List<Tarea> servicio2(boolean esCritica) {
         return esCritica ? getTareasCriticas() : getTareasNoCriticas();
@@ -99,8 +102,8 @@ public class Servicios {
         return new Backtraking().backtraking(tiempo, getTareasCriticas(), getTareasNoCriticas(), getAlmacenProcesadores());
     }
 
-    public Estado servicioGreedy(int tiempo){
-        return new Greedy().greedy(tiempo,getTareasCriticas(),getTareasNoCriticas(),getAlmacenProcesadores());
+    public Estado servicioGreedy(int tiempo) {
+        return new Greedy().greedy(tiempo, getTareasCriticas(), getTareasNoCriticas(), getAlmacenProcesadores());
     }
 
 }

@@ -3,9 +3,8 @@ package src;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
-import java.util.List;
 
-public class Procesador implements Comparable<Procesador>{
+public class Procesador implements Comparable<Procesador> {
 
     private String id;
     private String codigo;
@@ -25,7 +24,7 @@ public class Procesador implements Comparable<Procesador>{
         setAnio(anio);
         setTiempoProcesamiento(0);
         setCantCriticas(0);
-        listTareas = new LinkedList<>();
+        listTareas = new LinkedList<Tarea>();
     }
 
     public Procesador(String id, String codigo, Boolean refrigerado, Integer anio, LinkedList<Tarea> listTareas, Integer tiempoProcesamiento, Integer cantCriticas) {
@@ -58,7 +57,7 @@ public class Procesador implements Comparable<Procesador>{
         return tiempoProcesamiento;
     }
 
-    private List<Tarea> getListTareas() {
+    private LinkedList<Tarea> getListTareas() {
         return this.listTareas;
     }
 
@@ -90,45 +89,45 @@ public class Procesador implements Comparable<Procesador>{
         this.tiempoProcesamiento = tiempoProcesamiento;
     }
 
-    public void  addTarea(Tarea newTarea){
+    public void addTarea(Tarea newTarea) {
         setTiempoProcesamiento(getTiempoProcesamiento() + newTarea.getTiempo());
-        if(newTarea.getCritica()) setCantCriticas(getCantCriticas()+1);
+        if (newTarea.getCritica()) setCantCriticas(getCantCriticas() + 1);
         getListTareas().addFirst(newTarea);
     }
 
-    public void deleteTarea(Tarea oldTarea){
+    public void deleteTarea(Tarea oldTarea) {
         setTiempoProcesamiento(getTiempoProcesamiento() - oldTarea.getTiempo());
-        if(oldTarea.getCritica()) setCantCriticas(getCantCriticas()-1);
+        if (oldTarea.getCritica()) setCantCriticas(getCantCriticas() - 1);
         getListTareas().remove(oldTarea);
     }
 
-    public Procesador copy(){
+    public Procesador copy() {
         LinkedList<Tarea> newList = new LinkedList<Tarea>();
         newList.addAll(getListTareas());
-        return new Procesador(getId(),getCodigo(),getRefrigerado(),getAnio(),newList,getTiempoProcesamiento(),getCantCriticas());
+        return new Procesador(getId(), getCodigo(), getRefrigerado(), getAnio(), newList, getTiempoProcesamiento(), getCantCriticas());
     }
 
-    public boolean limiteCriticas(){
-        return getCantCriticas()>=LIMITE;
+    public boolean limiteCriticas() {
+        return getCantCriticas() >= LIMITE;
     }
 
-    private String listaToString(){
+    private String listaToString() {
         String cadena = "";
-        for (Tarea tarea: getListTareas()) {
-            cadena+= tarea.toString() + "\n";
+        for (Tarea tarea : getListTareas()) {
+            cadena += tarea.toString() + "\n";
         }
         return cadena;
     }
 
     @Override
     public String toString() {
-        String tareas = (!getListTareas().isEmpty()) ? listaToString() + "\n": " No hay tareas asignadas " + "\n";
-        return "Procesador { " +
-                "id='" + getId() + '\'' +
-                ", refrigerado = " + getRefrigerado() +
-                ", tiempo Procesamiento= " + getTiempoProcesamiento() + " }"+
+        String tareas = (!getListTareas().isEmpty()) ? listaToString() : " No hay tareas asignadas " + "\n";
+        return "Procesador: " +
+                "Id='" + getId() + '\'' +
+                ", Refrigerado = " + getRefrigerado() +
+                ", Tiempo Procesamiento= " + getTiempoProcesamiento() +
                 "\n" +
-                "Lista de Tareas = " +  tareas
+                "Lista de Tareas:  " + "\n" + tareas
                 ;
     }
 
