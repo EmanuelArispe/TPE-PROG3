@@ -57,9 +57,11 @@ public class Servicios {
         return listTareas;
     }
 
-    /* La complejidad computacional temporal de la función servicio1 es O(1), ya que todas las operaciones realizadas (acceso al mapa, acceso a los atributos y creación del objeto)
-     tienen una complejidad constante.
-     */
+    /*
+    *La complejidad computacional temporal de la función servicio1 es O(1),
+    *ya que todas las operaciones realizadas (acceso al mapa, acceso a los atributos y creación del objeto)
+    *tienen una complejidad constante.
+    */
     public Tarea servicio1(String ID) {
         return new Tarea(getAlmacenTareas().get(ID).getId(), getAlmacenTareas().get(ID).getNombre(),
                 getAlmacenTareas().get(ID).getTiempo(), getAlmacenTareas().get(ID).getCritica(),

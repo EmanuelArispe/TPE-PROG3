@@ -21,7 +21,8 @@ public class Greedy {
     }
 
 
-    /* En nuestra implementación de la estrategia Greedy en Java, hemos diseñado un algoritmo que maximiza la eficiencia al ordenar
+    /*
+     *En nuestra implementación de la estrategia Greedy en Java, hemos diseñado un algoritmo que maximiza la eficiencia al ordenar
      * las tareas según su tiempo de procesamiento, desde la más pesada hasta la más liviana.
      * Posteriormente, buscamos el candidato más idóneo que cumpla con las restricciones establecidas por la cátedra
      * y tenga el menor tiempo de procesamiento disponible en el procesador asignado.

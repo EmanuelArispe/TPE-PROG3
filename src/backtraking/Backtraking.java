@@ -59,12 +59,10 @@ public class Backtraking {
     private boolean superaLimiteTareasCriticas(Procesador prod, Tarea tarea) {
         return tarea.getCritica() && prod.limiteCriticas();
     }
-    // Si da true esta OK
 
     private boolean excedeTiempoSinRefrigeracion(Procesador prod, Tarea tarea, Integer tiempo) {
         return !prod.getRefrigerado() && tarea.getTiempo() > tiempo;
     }
-    /// Si da true esta OK
 
     private boolean esMejorSolucion(Estado actual) {
         return getMejorSolucion().getTiempoSolucion() == -1 || getMaxTiempoProcesamiento(actual) < getMejorSolucion().getTiempoSolucion();
